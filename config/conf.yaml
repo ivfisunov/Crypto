@@ -1,0 +1,9 @@
+currency:
+  fsyms:
+    - BTC
+    - ETH
+    - DASH
+  tsyms:
+    - USD
+    - EUR
+    - RUR
