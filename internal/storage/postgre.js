@@ -13,7 +13,7 @@ Database.Init = function (dsn) {
 };
 
 Database.prototype.createTable = async function () {
-  return await this.pool.query(`CREATE TABLE IF NOT EXISTS currency (
+  return await this.pool.query(`CREATE TABLE IF NOT EXISTS public.currency (
     id SERIAL PRIMARY KEY,
     data jsonb,
     "lastUpdate" timestamptz DEFAULT NOW(),
@@ -30,11 +30,11 @@ Database.prototype.saveCurrency = async function (data) {
   try {
     await client.query("BEGIN");
     await client.query(`
-    UPDATE currency
+    UPDATE public.currency
     SET status = 'old'
     WHERE status = 'new';`);
     await client.query(`
-    INSERT INTO currency
+    INSERT INTO public.currency
     (data, status)
     VALUES ($1, 'new');`,
       [data]
@@ -50,8 +50,8 @@ Database.prototype.saveCurrency = async function (data) {
 
 Database.prototype.clearOldRows = async function () {
   await this.pool.query(`
-    DELETE FROM currency
-    WHERE "lastUpdate" < ((SELECT "lastUpdate" FROM currency WHERE status='new') - INTERVAL '2 hours')
+    DELETE FROM public.currency
+    WHERE "lastUpdate" < ((SELECT "lastUpdate" FROM public.currency WHERE status='new') - INTERVAL '2 hours')
     AND status = 'old'`);
 };
 

@@ -11,7 +11,7 @@ const buildQueryString = (fsyms, tsyms) =>
       return acc;
     }, [])
     .join(",") +
-  " FROM currency WHERE status='new';";
+  " FROM public.currency WHERE status='new';";
 
 const parse = (data) =>
   Object.keys(data).reduce(
